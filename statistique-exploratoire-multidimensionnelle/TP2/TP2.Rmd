@@ -1,0 +1,177 @@
+---
+title: "Statistique Exploratoire Multidimensionnelle — TP 2"
+author: "Joshua MAAT"
+output:
+  pdf_document:
+    toc: true
+    toc_depth: '2'
+  html_document:
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    highlight: tango
+lang: fr
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE, fig.align = "center")
+```
+
+# 1. Représentation tabulaire et graphiques
+
+On va utiliser l'ensemble de données intégrées en R "mtcars"
+
+## 1) On crée un tableau de contingence avec les frequence absolue (pour cyc et am) :
+
+```{r}
+t <- table(cyl = mtcars$cyl, am = mtcars$am)
+t
+```
+
+
+## 2) On veut alors créer un histogramme avec des fréquence absolues pour l'attribut "wt" en utilisant 5 bins :
+
+```{r}
+hist(mtcars$wt,
+     breaks = 5,
+     freq   = TRUE,
+     labels = TRUE,
+     ylim   = c(0, 18),
+     xlab   = "Poids wt",
+     ylab   = "Fréquence absolue")
+```
+
+## 3) On veut alors faire un diagramme en boite pour l'attribut "poids" :
+
+```{r}
+boxplot(mtcars$wt,
+        main = "Poids (mtcars)",
+        ylab = "Poids wt")
+```
+
+
+
+# 2. Corrélation
+
+## 1) On veut calculer à la main la corrélation entre a et w :
+
+$$\bar a = \frac{11 + 15 + 23 + 46 + 52 + 75}{6} = \frac{222}{6} = 37$$
+$$\qquad \bar w = \frac{34 + 49 + 58 + 62 + 69 + 64}{6} = \frac{336}{6} = 56$$
+$$\sum_{i=1}^{n} (a_i - \bar a)(w_i - \bar w) = 1251$$
+
+$$\sqrt{\sum_{i=1}^{n} (a_i - \bar a)^2} = \sqrt{3106} $$
+
+$$\sqrt{\sum_{i=1}^{n} (w_i - \bar w)^2} = \sqrt{806} $$
+
+$$\frac{1251}{\sqrt{3106 \times 806}} \approx 0,79 $$
+## Si on le faisait à la main ça reviendrait au code :
+
+```{r}
+a <- c(11, 15, 23, 46, 52, 75)
+w <- c(34, 49, 58, 62, 69, 64)
+a_bar <- mean(a)
+w_bar <- mean(w)
+da <- a - a_bar
+dw <- w - w_bar
+Saw <- sum(da * dw)
+Saa <- sum(da^2)
+Sww <- sum(dw^2)
+r_pearson <- Saw / sqrt(Saa * Sww)
+r_pearson
+```
+
+## On utilise la fonction de R qui calcul directement pour vérifier : 
+
+```{r}
+cor(a, w)
+```
+
+On voit qu'il y a une assez forte corrélation entre le poids et l'âge.
+
+## 2) On veut cette fois faire la corrélation de rang de Spearman :
+
+$$ 1 - \frac{6 \sum_{i=1}^{n} d_i^2}{n\,(n^2 - 1)} = 1 - \frac{6 \times 2}{6 \times (6^2 - 1)} = 1 - \frac{12}{210} = 0,94$$
+
+
+## A la main en code : 
+
+```{r}
+rang_a <- rank(a)
+rang_w <- rank(w)
+
+d <- rang_a - rang_w
+sp <- 1 - 6 * sum(d^2) / (6 * (6^2 - 1))
+sp
+```
+
+## On utilise la fonction de R qui calcul directement pour vérifier : 
+
+```{r}
+cor(a, w, method = "spearman")
+```
+
+
+Que l'on range les personnes par leur age ou par leur poid donnerait quasiment la même chose, on a un résultat très proche de 1.
+
+
+## 3) On dessine le nuage de points pour nous rendre compte visuellement de la relation :
+
+
+```{r}
+plot(a, w,
+     xlab = "Âge", ylab = "Poids",
+     main = "Nuage de points")
+```
+
+
+
+# 3. Data Frames
+
+## 1) On vérifie le type de données que l'on a et vérifions s'il s'agit bien d'un data frame :
+
+```{r}
+class(state.x77)
+is.data.frame(state.x77)
+head(state.x77)
+```
+
+On le convertit en data frame : 
+
+```{r}
+state <- as.data.frame(state.x77)
+is.data.frame(state)
+names(state)
+```
+
+## 2) On veut créer un nouvel attribut "states" qui contient le nom des lignes de notre dataset puis enlever le nom des lignes :
+
+```{r}
+state$states <- rownames(state)
+rownames(state) <- NULL
+head(state)
+```
+
+## 3) On cherche a trouver combien d'états ont un revenu par habitant supérieur à 4300$ et une population supérieur à 1000 (en millier) habitants :
+
+```{r}
+revenu_population <- state$Income > 4300 & state$Population > 1000
+state$states[revenu_population]
+```
+
+## 4) On veut maintenant afficher les 5 premiers états aux revenus les plus élevés en ayant trié par ordre décroissant nos données par rapport au revenu :
+
+```{r}
+state_trie <- state[order(state$Income,decreasing = TRUE),]
+head(state_trie,5)
+```
+## 5) On veut créer un nouvel attribut ordinal "frost_cat" prenant des valeurs en fonction d'intervalles des valeurs je suppose de Frost :
+
+```{r}
+state$frost_cat <- cut(state$Frost, breaks = c(-1,30,90,190), labels = c("faible","intermédiaire","élevé"), ordered_result = TRUE)
+state[state$frost_cat == "faible","states"]
+```
+
+
+
+
+

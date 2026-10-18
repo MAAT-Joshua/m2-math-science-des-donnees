@@ -1,0 +1,250 @@
+---
+title: "Statistique Exploratoire Multidimensionnelle — TP 1"
+author: "Joshua MAAT"
+output:
+  pdf_document:
+    toc: true
+    toc_depth: '2'
+  html_document:
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    highlight: tango
+lang: fr
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE, fig.align = "center")
+```
+
+
+
+------------------------------------------------------------------------
+
+# Partie 1 — Quiz
+
+## Q1 : réponse 4
+## Q2 : réponse 2
+## Q3 : réponse 1
+## Q4 : réponse 3
+Ce n'est pas la 1 car pas de "0" pour les températures
+Ce n'est pas 2 car la numérotation ne donne pas d'ordre, pas de distance.
+La réponse 3 est correcte on garde un ordre
+Ce n'est pas la 4 la moyenne n'a pas de sens pas de vrai distance entre les niveaux.
+
+## Q5 : réponse 4
+écart type à 0 et moyenne à 1 donc tous les clients on répondu 
+la même chose (1)
+
+## Q6 : réponse 4
+## Q7 : réponse 2
+## Q8 : réponse 4
+## Q9 : réponse 1
+## Q10 :réponse 4 (calcul la médiane du vecteur d)
+
+
+# Partie 2 — Initiation à R
+
+1) On va créer trois vecteurs `a`, `b`, `c` contenant chacun 3 entiers entre 1 et 9, les assembler en une matrice 3×3 où chaque colonne repprésente un vecteur, puis afficher la matrice.
+
+```{r}
+a <- c(1, 2, 3)
+b <- c(4, 5, 6)
+c <- c(7, 8, 9)
+M <- cbind(a, b, c)
+print(M)
+
+```
+2) On importe le fichier 'Table0.txt' et on change le nom des colonnes, puis on change le nom des lignes avec les données de la colonnes des noms et on supprime cette colonne.
+
+```{r}
+Table0 <- read.table("Table0.txt")
+colnames(Table0) <- c("Nom", "Age", "Taille", "Poids", "Sexe")
+rownames(Table0) <- Table0$Nom
+Table0$Nom <- NULL
+Table0
+
+```
+
+3) On importe le fichier 'Table1.txt' et on regarde son nombre de ligne et de colonnes, puis on le réimporte en faisant en sorte que la colonne des noms soit utilisé comme noms de lignes
+
+```{r}
+Table1 <- read.table("Table1.txt",TRUE)
+nrow(Table1)
+ncol(Table1)
+Table1
+```
+```{r}
+Table1 <- read.table("Table1.txt", header = TRUE, row.names = 1)
+
+Table1
+str(Table1)
+```
+
+4) On passe au jeu de données 'Cereals.csv'
+
+```{r}
+cereals <- read.csv("Cereals.csv")
+
+head(cereals)
+str(cereals)
+```
+On a pour chaque type de céréales des données sur ce qu'elles contiennent ainsi que le fournisseur.
+
+a) D'abord on ajoute une variable 'totalcarb' étant la somme de 'sugars' et 'carbo' :
+
+```{r}
+cereals$totalcarb <- cereals$carbo + cereals$sugars
+head(cereals)
+```
+
+
+b) On veut compter le nombre de céréal 'hot'
+
+```{r}
+hot <- subset(cereals, Cold.or.Hot == "H")
+nrow(hot)
+```
+
+Il y en a donc 3.
+
+c) On veut savoir combien de fournisseur sont unique dans nos données :
+
+```{r}
+length(unique(cereals$Supplier))
+```
+
+Il y en donc 7.
+
+d) On prend un sous ensemble contenant uniquement celles du fournisseur 'K' (Kellogs)
+
+```{r}
+kelloggs <- subset(cereals, Supplier == "K")
+head(kelloggs)
+```
+
+e) On prend un sous ensemble contenant moins de 80 cal et plus de 20 unité de vitamine : 
+
+```{r}
+calvit <- subset(cereals, calories < 80 & vitamins > 20)
+calvit
+```
+
+f) on prend un sous ensemble contennat au moins une unité de sucre et et on conserve seulement 3 variables :
+
+```{r}
+unsucre <- subset(cereals, sugars >= 1,select = c(Cereal.name, calories, vitamins))
+head(unsucre)
+```
+
+g) on sauvegarde un des sous ensembles d'avant :
+
+```{r}
+write.csv(unsucre, file = "unsucre.csv", row.names = FALSE)
+```
+
+h) on renomme la colonne fournisseur en producteur :
+
+```{r}
+names(cereals)[2] <- "producteur"
+head(cereals)
+```
+
+5) On passe au jeu de données 'islands'
+
+```{r}
+data(islands)
+length(islands)
+str(islands)
+head(islands)
+summary(islands)
+```
+
+On a les données de superficie de terres (continents et îles)
+
+
+On utilise d'autres fonctions que summary pour donner la moyenne, médiane, max, min, écart type, les quantiles : 
+
+```{r}
+mean(islands)
+median(islands)
+range(islands)
+```
+```{r}
+sd(islands)
+quantile(islands, probs = c(0,0.25, 0.5, 0.75,1))
+quantile(islands, probs = c(0.005,0.95))
+
+```
+
+(généralement on veut 5% et 95% on remplacerait 0.005 par 0.05)
+
+
+```{r}
+q_1 <- quantile(islands, probs = c(0.25))
+q_2 <- quantile(islands, probs = c(0.75))
+q_2-q_1
+
+```
+
+On veut alors créer un histogramme avec certaines propriétés : 
+
+– A. Fréquence de chaque groupe
+
+– B. Proportion de chaque groupe
+
+```{r}
+hist(islands,freq = FALSE,main = "Histogramme freq/proportion de chaque groupe",xlab = "Superficie",ylab = "Fréquence/Densité")
+```
+
+
+Et esnuite des diagrammes en boites avec ces conditions : 
+
+C. Avec les valeurs aberrantes
+
+```{r}
+boxplot(islands,
+        main = "C. Avec les valeurs aberrantes",
+        ylab = "Superficie")
+```
+
+
+
+D. Sans les valeurs aberrantes
+
+```{r}
+boxplot(islands,
+        outline = FALSE,
+        main = "D. Sans les valeurs aberrantes",
+        ylab = "Superficie")
+```
+
+
+6) On passe au jeu de données 'sales', on veut classer les ventes en trois groupes en fonction du montant des ventes, trois catégories : small, medium, big. On le fait dans une nouvelle catégorie 'spender' :
+
+```{r}
+sales <- read.csv("yearly_sales.csv")
+head(sales)
+```
+
+
+```{r}
+sales$spender <- sales$sales_total
+sales$spender <- ifelse(sales$spender < 100, "small",
+                  ifelse(sales$spender <= 500, "medium", "big"))
+sales$spender <- factor(sales$spender, levels = c("small", "medium", "big"), ordered = TRUE)
+head(sales)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
