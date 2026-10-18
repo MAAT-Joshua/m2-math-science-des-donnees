@@ -5,7 +5,7 @@ Les énoncés appartiennent à l'enseignant, ce dépôt contient uniquement mon 
 
 ## Contenu
 
-- **TP1** : [thème] (en cours, sera ajouté une fois terminé)
+- **TP1** : Régression linéaire en R (en cours)
 
 ## Données et exécution
 
