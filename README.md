@@ -10,5 +10,6 @@ Chaque dossier correspond à une matière et contient son propre README.
 | [statistique-exploratoire-multidimensionnelle](statistique-exploratoire-multidimensionnelle/) | 2 TP : initiation à R, exploration et visualisation de données | R Markdown |
 | [statistiques-descriptives-analyse-de-donnees-algorithmes](statistiques-descriptives-analyse-de-donnees-algorithmes/) | 2 TP : initiation à python, analyse et visualisation de données avec numpy, pandas et matplotlib| Python |
 | [statistique](statistique/) | TP en cours | R Markdown |
+| [deep-learning](deep-learning/) | TP à venir | Python |
 
 Les énoncés et les données fournis par les enseignants ne sont pas redistribués.
