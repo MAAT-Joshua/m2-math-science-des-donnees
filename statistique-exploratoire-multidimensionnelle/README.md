@@ -14,7 +14,7 @@ Les énoncés appartiennent à l'enseignant, ce dépôt contient uniquement mon 
   - corrélation
   - data frames
  
-- **[TP3](TP3/TP3.Rmd)** ([rendu PDF](TP3/TP3.pdf)) : Analyse en Composantes Principales (ACP
+- **[TP3](TP3/TP3.Rmd)** ([rendu PDF](TP3/TP3.pdf)) : Analyse en Composantes Principales (ACP)
   - Calculs, Visualisation, Interprétation
   - Cercles des corrélations
   - Qualité de représentation
