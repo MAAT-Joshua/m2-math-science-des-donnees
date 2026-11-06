@@ -13,6 +13,12 @@ Les énoncés appartiennent à l'enseignant, ce dépôt contient uniquement mon 
   - représentations tabulaires et graphiques
   - corrélation
   - data frames
+ 
+- **[TP3](TP3/TP3.Rmd)** ([rendu PDF](TP3/TP3.pdf)) : Analyse en Composantes Principales (ACP
+  - Calculs, Visualisation, Interprétation
+  - Cercles des corrélations
+  - Qualité de représentation
+  - Contributions
 
 ## Données et exécution
 
