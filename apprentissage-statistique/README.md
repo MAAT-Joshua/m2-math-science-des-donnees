@@ -15,6 +15,11 @@ Les énoncés appartiennent à l enseignant, ce dépôt contient uniquement mon 
   - Précision d un modèle
   - Fonction perte
   - Risque empirique
+ 
+- **[TP3](TP3/TP3.ipynb)** : Evaluation et comparaison de modèles
+  - Matrice de confusion et risque empirique
+  - Comparaison automatique de deux modèles
+  - Comparaison sur apprentissage et test
 
 ## Lancer le code
 
