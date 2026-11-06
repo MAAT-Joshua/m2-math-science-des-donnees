@@ -1,0 +1,335 @@
+---
+title: "Statistique Exploratoire Multidimensionnelle — TP 3"
+author: "Joshua MAAT"
+output:
+  pdf_document:
+    toc: true
+    toc_depth: '2'
+  html_document:
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    highlight: tango
+lang: fr
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE, fig.align = "center")
+```
+
+# 1 – Préparaton et calcul de l’APC
+
+### 1) Installation et chargement de FactoMinR et FactoExtra
+
+```{r}
+install.packages(c("FactoMineR", "factoextra"))
+library(FactoMineR)
+library(factoextra)
+```
+
+### 2) chargement jeu de données et résumé
+
+```{r}
+data(decathlon2, package = "factoextra")
+summary(decathlon2)
+dim(decathlon2)
+```
+
+
+### 3) On extrait les 10 premières variables du tableau qui correspondent aux sports
+
+```{r}
+decatsports <- decathlon2[1:23,1:10]
+head(decatsports)
+```
+
+### 4) On effectue une acp normée, les paramètres les pus importants sont : 
+
+  – X le jeu de données
+  – scale.unit (true ou false) pour normaliser les données
+  – ncp (le nombre de composantes principales)
+  – ensuite les .sup qui permettent d'ajouter des individus, ou des variables quantitatives ou qualitatives (elles ne participent pas à la construction des composantes principales)
+  – Le graph pour l'affichage
+
+```{r}
+library(FactoMineR)
+library(factoextra)
+acpdecat <- PCA(decatsports, scale.unit = TRUE)
+print(acpdecat)
+```
+
+
+
+
+# 2 – Interprétation et visualisation
+
+Interprétation et utilisations des données fournies par l'acp par des fonctions du package R factoextra
+
+## A) Ces fonctons sont les suivantes :
+
+### 5) on écrit un résumé pour chacune d'elles :
+
+### – get_eigenvalue(res.pca)
+
+Nous donne les valeurs propres, le pourcentage de variance et le pourcentage cumulé de chaque composante.
+
+### – fviz_eig(res.pca)
+
+Trace le diagramme des éboulis
+
+### – get_pca_ind(res.pca)
+
+Extrait les résultats des individus
+
+### – get_pca_var(res.pca)
+
+Extrait les résultats des variables
+
+### – fviz_pca_ind(res.pca)
+
+Visualisation du nuage des individus
+
+### – fviz_pca_var(res.pca)
+
+permet d'afficher le cercle des corrélations des variables
+
+### – fviz_pca_biplot(res.pca)
+
+Permet de superposer les individus et les variables sur le même graphique
+
+
+## B) Les valeurs propres
+
+On s'intéresse aux valeurs propres, on veut choisir notre nombre de composantes principales.
+
+### 6) on utilise la fonction get_eigenvalue(res.pca) pour avoir les valeurs propres, la proporton de variance retenue et la proporton cumulatve de variance retenue
+
+```{r}
+eig <- get_eigenvalue(acpdecat)
+round(eig, 2)
+```
+
+
+### 7) La variance retenue par les trois première composantes principales est 72.02%
+
+### 8) Ayant effectué mon mémoire de l'année dernière sur l'acp je peux dire qu'il n'y a pas de règle absolu tout dépend de ce que l'on souhaite faire, plusieurs règles existent : critère de kaiser, règle du coude... mais pour donner une réponse ici on pourrait considéré que 2 composantes principales sont vraiment insuffisantes.
+
+### 9) On fait un diagramme de Scree 
+
+```{r}
+fviz_eig(acpdecat)
+```
+
+La règle du coude mentionné avant, on peut retenir 3 composantes.
+
+
+
+# C) Graphique des variables
+
+```{r}
+var <- get_pca_var(acpdecat)
+var
+```
+```{r}
+head(var$coord)
+head(var$cor)
+head(var$cos2)
+head(var$contrib)
+```
+
+var$coord contient les coordonnées des variables sur chaque axe
+
+var$cor contient les corrélations entre chaque variable et chaque composante principale
+
+var$cos2 contient les cosinus carrés, c’est-à-dire la qualité de représentation de chaque variable sur chaque axe
+
+var$contrib contient les contributions de chaque variable à la construction de chaque axe
+
+# D. Cercle de corrélaton (correlaton circle)
+
+### 11) Le cercle des corrélations est la représentation graphique des variables dans le plan des deux premiers facteurs (F1,F2)
+
+### Règles d’interprétation :
+
+— Un point proche du bord du cercle indique que la variable est bien représentée sur le
+plan (F1,F2).
+
+— Deux variables proches l’une de l’autre sont fortement et positivement corrélées; à
+l’opposé, elles sont fortement négativement corrélées.
+
+— Une variable proche du centre est mal représentée sur ce plan (son information est
+portée par d’autres axes).
+
+— L’angle $\theta$ entre les vecteurs de deux variables approche leur corrélation :$r(xj,xm) \approx \cos(\theta)$
+
+### 12) on trouve les données avec : 
+
+
+```{r}
+head(var$coord)
+```
+### 13) On le construit avec : 
+
+```{r}
+fviz_pca_var(acpdecat)
+```
+
+
+### 14) Dim.1 (41.2 %) oppose les épreuves de vitesse aux épreuves de puissance et de saut. 
+
+X100m (-0.85), 
+
+X110m.hurdle (-0.76),
+
+X400m (-0.70) 
+
+ont des corrélations négatives. 
+
+Long.jump (0.79),
+
+Discus (0.74),
+
+Shot.put (0.73),
+
+High.jump (0.61) 
+
+ont des corrélations positives.
+
+### Dim.2 (18.4 %) est surtout portée par Pole.vault (0.81) et X1500m (0.78), qui sont les deux variables les plus proches de cet axe.
+
+
+X100m, X400m et X110m.hurdle pointent dans la même direction, donc elles sont corrélées positivement entre elles. 
+
+Elles sont opposées à Long.jump, Shot.put et Discus (corrélation négative).
+
+
+# E. Qualité de la représentaton
+
+### 15) La qualité de représentation d’une variable sur un axe mesure à quel point cette variable est bien reconstituée par cet axe. Elle se calcule par le cosinus carré de l’angle entre la variable et l’axe.
+
+Proche de 1 est bien représentée dans le sous espace choisi. 
+
+À l’inverse, proche de 0 signale que la variable est mal représentée et que son information
+est portée par d’autres axes.
+
+### 16) On s'interesse à la fonction corrplot : 
+
+```{r}
+library(corrplot)
+```
+
+corr : la matrice à afficher.
+is.corr : TRUE si c’est une matrice de corrélations (valeurs entre -1 et 1). Pour cos2 ou contrib, on met FALSE.
+method : la forme ("circle" par défaut, "square", "number", "color"...).
+type : matrice complète, partie haute ou basse.
+col : la palette de couleurs.
+tl.col, tl.cex : couleur et taille des noms.
+
+
+### 17) On visualise 
+
+```{r}
+corrplot(var$cos2, is.corr = FALSE)
+```
+
+### 18) On crée le diagramme en barre :
+
+```{r}
+fviz_cos2(acpdecat, choice = "var", axes = 1)
+fviz_cos2(acpdecat, choice = "var", axes = 2)
+fviz_cos2(acpdecat, choice = "var", axes = 1:2)
+```
+### 19) On interprete : 
+
+Sur Dim.1, les variables les mieux représentées sont X100m, Long.jum, X110m.hurdle, Discus et Shot.put.
+
+Sur Dim.2, Pole.vault et X1500m sont les mieux représentées. Les autres variables ont des cos2 faibles sur cet axe.
+
+Sur le plan 1-2, les cos2 cumulés vont de 0.33 à 0.76. X100m, Long.jump et Pole.vault sont bien représentées. 
+
+Javeline est mal représentée sur ce plan.
+
+
+
+# F. Contributons des variables aux composantes principales
+
+
+```{r}
+head(var$contrib, 4)
+```
+
+### 20) On met en évidence les variables qui contribuent le plus :
+
+
+```{r}
+corrplot(var$contrib, is.corr = FALSE)
+```
+
+
+### 21) on trace un diagramme en barre des contributions :
+
+
+```{r}
+fviz_contrib(acpdecat, choice = "var", axes = 1)
+fviz_contrib(acpdecat, choice = "var", axes = 2)
+fviz_contrib(acpdecat, choice = "var", axes = 1:2)
+```
+
+
+
+# G. Graphique des individus
+
+### 22) On s'interesse à  la foncton get_pca_ind():
+
+```{r}
+ind <- get_pca_ind(acpdecat)
+print(ind)
+head(ind$coord)
+head(ind$cos2)
+head(ind$contrib)
+```
+
+
+get_pca_ind() renvoie une liste avec :
+
+ind$coord : les coordonnées des individus sur les axes.
+
+ind$cos2 : la qualité de représentation de chaque individu sur chaque axe.
+
+ind$contrib : les contributions de chaque individu à la construction de chaque axe.
+
+
+### 23) On produit le graphique des individus :
+
+```{r}
+fviz_pca_ind(acpdecat)
+```
+
+
+### 24) On améliore la visualosation : 
+
+```{r}
+fviz_pca_ind(acpdecat,
+             col.ind = "cos2",
+             gradient.cols = c("blue", "orange", "red"))
+```
+
+
+### 25) On fait un diagramme à barres du cos2 des individus :
+
+```{r}
+fviz_cos2(acpdecat, choice = "ind", axes = 1:2)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
