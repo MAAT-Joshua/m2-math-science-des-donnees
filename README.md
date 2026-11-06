@@ -6,10 +6,10 @@ Chaque dossier correspond à une matière et contient son propre README.
 | Dossier | Contenu | Langage |
 |---------|---------|---------|
 | [sciences-des-donnees](sciences-des-donnees/) | 5 TP : scikit-learn, visualisation, descente de gradient, classification, clustering | Python |
-| [apprentissage-statistique](apprentissage-statistique/) | 2 TP : maximum à posteriori et de vraisemblance, choix de modèle et fonction perte | Python |
-| [statistique-exploratoire-multidimensionnelle](statistique-exploratoire-multidimensionnelle/) | 2 TP : initiation à R, exploration et visualisation de données | R Markdown |
+| [apprentissage-statistique](apprentissage-statistique/) | 3 TP : maximum à posteriori et de vraisemblance, choix de modèle et fonction perte, évaluation et comparaison de modèles | Python |
+| [statistique-exploratoire-multidimensionnelle](statistique-exploratoire-multidimensionnelle/) | 3 TP : initiation à R, exploration et visualisation de données, ACP | R Markdown |
 | [statistiques-descriptives-analyse-de-donnees-algorithmes](statistiques-descriptives-analyse-de-donnees-algorithmes/) | 2 TP : initiation à python, analyse et visualisation de données avec numpy, pandas et matplotlib| Python |
 | [statistiques-en-grandes-dimensions](statistiques-en-grandes-dimensions/) | TP en cours | R Markdown |
-| [deep-learning](deep-learning/) | TP à venir | Python |
+| [deep-learning](deep-learning/) | 2 TP : deep learning avec PyTorch, transformations, adaline, perceptron (+multi couches) | Python |
 
 Les énoncés et les données fournis par les enseignants ne sont pas redistribués.
