@@ -1,6 +1,6 @@
 # Deep Learning
 
-Travaux pratiques du M2 Mathématiques : Deep learning, Université Sorbonne Paris Nord, 2026-2027.
+Travaux pratiques du M2 Mathématiques : Science des données, Université Sorbonne Paris Nord, 2026-2027.
 
 ## Contenu
 
